@@ -1,0 +1,50 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    position: relative;
+    width: 100%;
+    z-index: 1000;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .logo span {
+    animation: blink 1s steps(2, start) infinite;
+  }
+  
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+  
+  .navMenu {
+    display: flex;
+    gap: 1.5rem;
+  }
+  
+  .navMenu a {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+  }
+  
+  .burgerMenu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    cursor: pointer;
+  }
+  
+  .burgerMenu div {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+  }
+  
