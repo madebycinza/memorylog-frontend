@@ -1,0 +1,11 @@
+.title {
+    font-family: var(--font-agharti);
+    font-weight: 200;
+    font-size: 18rem;
+    letter-spacing: 12px;
+    color: var(--main-color);
+    text-align: center;
+    text-transform: uppercase;
+    z-index: 3; /* Ensure it stays above the loader */
+    margin: 0 0 100px;
+  }

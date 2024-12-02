@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import ClientNav from "../components/NavClient";
+import ClientNav from "./components/NavClient";
+import { LoaderProvider } from "./contexts/LoaderContext";
 
 export const metadata: Metadata = {
   title: "Memorylog",
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ClientNav>{children}</ClientNav>
+        <LoaderProvider>
+          <ClientNav>{children}</ClientNav>
+        </LoaderProvider>
       </body>
     </html>
   );

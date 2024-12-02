@@ -1,86 +1,71 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
+import { useState } from 'react';
+import styles from './NavLogo.module.css';
 import api from '@/lib/api';
-import styles from './NavLayout.module.css';
 
-type Counts = {
-  albums: number;
-  places: number;
-  years: number;
+type NavLogoProps = {
+  pathname: string; // Current pathname
+  router: any; // Next.js router
 };
 
-export default function NavLayout({ children }: { children: React.ReactNode }) {
-  const [counts, setCounts] = useState<Counts>({ albums: 0, places: 0, years: 0 });
+export default function NavLogo({ pathname, router }: NavLogoProps) {
   const [logoText, setLogoText] = useState<JSX.Element[]>([<span key="M">M</span>]); // State for animated logo text
   const [blinking, setBlinking] = useState<boolean>(true); // State to control blinking underscore
   const [showArrow, setShowArrow] = useState<boolean>(false); // State to control visibility of >
   const [isAnimating, setIsAnimating] = useState<boolean>(false); // State to prevent multiple animations
 
-  const router = useRouter();
-  const pathname = usePathname();
-
-  useEffect(() => {
-    async function fetchCounts() {
-      try {
-        const [albumsRes] = await Promise.all([
-          api.get('/albums'),
-          api.get('/places'),
-          api.get('/years'),
-        ]);
-
-        setCounts({
-          albums: albumsRes.data.data.length,
-          places: albumsRes.data.data.length,
-          years: albumsRes.data.data.length,
-        });
-      } catch (error) {
-        console.error('Error fetching counts:', error);
-      }
-    }
-
-    fetchCounts();
-  }, []);
-
   async function handleLogoClick() {
     if (isAnimating) return; // Prevent further clicks during animation
-  
+
     if (pathname === '/') {
       try {
         const response = await api.get('/albums?populate=Year&populate=Places');
         const albums = response?.data?.data;
-  
+
         if (Array.isArray(albums) && albums.length > 0) {
           const randomAlbum = albums[Math.floor(Math.random() * albums.length)];
-          const rawPlace = randomAlbum?.Places?.[0]?.Title || 'Unknown Place';
-          const albumYear = randomAlbum?.Year?.Title || 'Unknown Year';
-  
+          const rawPlace = randomAlbum?.Places?.[0]?.Title || 'Place';
+          const albumYear = randomAlbum?.Year?.Title || 'Year';
+
           // Extract only the part before the comma in the place
           const albumPlace = rawPlace.split(',')[0];
-  
-          // Delay the navigation by 500ms
+
+          // Delay the navigation by 1.5s
           setTimeout(() => {
             if (randomAlbum.documentId) {
               router.push(`/album/${randomAlbum.documentId}`);
             }
-          }, 500);
-  
+          }, 1500);
+
           // Trigger the animation
           animateLogoWithPlaceAndYear(albumPlace, albumYear);
         } else {
-          console.error('No albums found.');
-          setLogoText([<span key="error">No Albums Found</span>]); // Fallback text
+          displayFallbackText('No Albums Found');
         }
       } catch (error) {
         console.error('Error fetching random album:', error);
-        setLogoText([<span key="error">Error Fetching Albums</span>]); // Fallback text
+        displayFallbackText('Error Fetching Albums');
       }
     } else {
       router.push('/');
     }
-  }  
+  }
+
+  function displayFallbackText(message: string) {
+    setLogoText([
+      <span key="error" className={`${styles.randomAlbumError} ${styles.blinking}`}>
+        {message}
+      </span>,
+    ]);
+    setBlinking(false); // Stop the blinking underscore
+
+    setTimeout(() => {
+      // Reset to default state after 5 seconds
+      setLogoText([<span key="M">M</span>]);
+      setBlinking(true); // Resume blinking underscore
+    }, 5000);
+  }
 
   function animateLogoWithPlaceAndYear(place: string, year: string) {
     setIsAnimating(true); // Start animation
@@ -119,14 +104,14 @@ export default function NavLayout({ children }: { children: React.ReactNode }) {
       setShowArrow(true); // Show the arrow
     });
 
-    // Step 2: Blink the ">" with underscore for 500ms
+    // Step 2: Blink the ">" with underscore for 300ms
     setTimeout(() => {
       setBlinking(true);
     }, 200);
 
     setTimeout(() => {
       setBlinking(false);
-    }, 700); // 200ms deletion + 500ms blinking
+    }, 500); // 200ms deletion + 300ms blinking
 
     // Step 3: Type out the place
     setTimeout(() => {
@@ -135,12 +120,12 @@ export default function NavLayout({ children }: { children: React.ReactNode }) {
           <span key="place" className={styles.randomAlbum}>{typedPlace}</span>,
         ]);
       });
-    }, 700); // 200ms deletion + 500ms blinking
+    }, 500); // 200ms deletion + 300ms blinking
 
     // Step 4: Pause for 500ms with blinking underscore
     setTimeout(() => {
       setBlinking(true);
-    }, 1500); // Typing place duration + 700ms
+    }, 1200); // Typing place duration + 700ms
 
     // Step 5: Type out the year
     setTimeout(() => {
@@ -151,12 +136,12 @@ export default function NavLayout({ children }: { children: React.ReactNode }) {
           <span key="year" className={styles.randomAlbum}> {typedYear}</span>,
         ]);
       });
-    }, 2000); // Typing place + 500ms pause
+    }, 1700); // Typing place + 500ms pause
 
     // Step 6: Blink for 2 seconds
     setTimeout(() => {
       setBlinking(true);
-    }, 2200); // Typing animations + blinking
+    }, 1900); // Typing animations + blinking
 
     // Step 7: Delete everything letter by letter
     setTimeout(() => {
@@ -167,7 +152,7 @@ export default function NavLayout({ children }: { children: React.ReactNode }) {
           <span key="remaining" className={styles.randomAlbum}>{remainingText}</span>,
         ]);
       });
-    }, 4200); // Typing animations + 2s blinking
+    }, 2900); // Typing animations + 1s blinking
 
     // Step 8: Retype "M" with blinking underscore
     setTimeout(() => {
@@ -175,33 +160,14 @@ export default function NavLayout({ children }: { children: React.ReactNode }) {
       setBlinking(true);
       setShowArrow(false);
       setIsAnimating(false); // End animation
-    }, 4700); // 4200ms animation + 500ms deletion
+    }, 3400); // 2900ms animation + 500ms deletion
   }
 
   return (
-    <div>
-      <header className={styles.header}>
-        {/* Logo */}
-        <div className={styles.logo} onClick={handleLogoClick}>
-          {showArrow && <span className={styles.arrow}>&gt;</span>}
-          {logoText}
-          {blinking && <span className={styles.underscore}>_</span>}
-        </div>
-
-        {/* Navigation Links */}
-        <nav className={styles.navMenu}>
-          <Link href="/albums">{counts.albums} albums</Link>
-          <Link href="/places">{counts.places} places</Link>
-          <Link href="/years">{counts.years} years</Link>
-        </nav>
-
-        {/* Plus icon */}
-        <Link href="/about" className={styles.plusIcon}>
-          +
-        </Link>
-      </header>
-
-      <main>{children}</main>
+    <div className={styles.logo} onClick={handleLogoClick}>
+      {showArrow && <span className={styles.arrow}>&gt;</span>}
+      {logoText}
+      {blinking && <span className={styles.underscore}>_</span>}
     </div>
   );
 }

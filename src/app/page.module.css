@@ -15,7 +15,7 @@
   height: 100svh;
   object-fit: cover;
   object-position: center;
-  z-index: -1; /* Place the video behind everything */
+  z-index: -3; /* Place the video behind everything */
 }
 
 .videoOverlay {
@@ -28,40 +28,17 @@
   object-position: center;
   background: var(--dark-color);
   opacity: 0.5;
-  z-index: 0; /* Place the video behind everything */
+  z-index: -2; /* Place the video behind everything */
 }
 
 .centeredContent {
   position: relative;
-  z-index: 2; /* Keep it above the video */
+  z-index: 1; /* Keep it above the video */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
-}
-
-.title {
-  font-family: var(--font-agharti);
-  font-weight: 200;
-  font-size: 18rem;
-  letter-spacing: 12px;
-  color: var(--main-color);
-  text-align: center;
-  text-transform: uppercase;
-  z-index: 3; /* Ensure it stays above the loader */
-  margin: 0 0 100px;
-}
-
-.fullScreenLoader {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: var(--dark-color);
-  opacity: 1;
-  z-index: 2; /* Loader is behind the text but above the video */
 }
 
 .credit {
@@ -83,7 +60,7 @@
 
 .creditLarge {
   font-size: 1.4rem;
-  letter-spacing: 4px;
+  letter-spacing: 2px;
   margin: 5px 0 0;
 }
 
