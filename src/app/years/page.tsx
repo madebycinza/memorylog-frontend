@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { TransitionLink } from '@/app/utils/TransitionLink';
+import TransitionContent from '@/app/utils/TransitionContent';
 import api from '@/lib/api';
 
 type Year = {
@@ -32,19 +33,19 @@ export default function YearsPage() {
     fetchYears();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p></p>;
   if (error) return <p>{error}</p>;
 
   return (
-    <div>
+    <TransitionContent>
       <h1>Years</h1>
       <ul>
         {years.map((year) => (
           <li key={year.id}>
-            <Link href={`/year/${year.documentId}`}>{year.Title}</Link>
+            <TransitionLink href={`/year/${year.documentId}`}>{year.Title}</TransitionLink>
           </li>
         ))}
       </ul>
-    </div>
+    </TransitionContent>
   );
 }

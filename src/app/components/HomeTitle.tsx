@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import styles from './HomeTitle.module.css';
-import { useLoader } from '../contexts/LoaderContext'; // Access `isInitial`
+import { useLoader } from '@/app/utils/LoaderContext';
+import styles from '@/app/styles/home.module.css';
 
 const text = 'MEMORYLOG'; // The full word
 
@@ -21,11 +21,6 @@ export default function HomeTitle() {
         setTitleScale(1); // Scale h1 to full size
       };
 
-      // Delay scale animation by 1.7 seconds to match loader timing
-      const scaleTimeout = setTimeout(() => {
-        handleAnimationSequence();
-      }, 1700);
-
       // Glitch animation logic
       const shuffleArray = (array: number[]) =>
         array
@@ -36,7 +31,7 @@ export default function HomeTitle() {
       const randomOrder = shuffleArray([...Array(text.length).keys()]);
 
       const glitchTimer = setTimeout(() => {
-        const interval = 1200 / text.length; // Spread letters evenly over 1200ms
+        const interval = 100; //ms
 
         randomOrder.forEach((index, order) => {
           setTimeout(() => {
@@ -49,6 +44,11 @@ export default function HomeTitle() {
         });
       }, 200); // Start glitching after 200ms
 
+      // Delay scale animation by 1800ms seconds to match loader timing
+      const scaleTimeout = setTimeout(() => {
+        handleAnimationSequence();
+      }, 1800);
+      
       // Cleanup timeouts
       return () => {
         clearTimeout(scaleTimeout);
@@ -63,11 +63,11 @@ export default function HomeTitle() {
 
   return (
     <motion.h1
-      className={styles.title}
+      className={styles.homeTitle}
       initial={isInitial ? { scale: 0.6 } : { scale: 1 }} // Start small only for initial load
       animate={{ scale: titleScale }} // Animate scale
       transition={{
-        duration: isInitial ? 0.5 : 0, // Scaling duration only for first load
+        duration: isInitial ? 0.7 : 0, // Scaling duration only for first load
         ease: [0.755, 0.050, 0.855, 0.060], // easeInQuart cubic-bezier
       }}
     >

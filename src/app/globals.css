@@ -49,3 +49,14 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+/* Page transitions */
+main, main>div, .homeCenter, .homeBottom, .pageContent {
+  transition-property: opacity;
+  transition-timing-function: ease-in-out;
+  transition-duration: 500ms;
+}
+
+.page-transition {
+  opacity: 0 !important;
+}

@@ -1,4 +1,5 @@
 import api from '@/lib/api';
+import TransitionContent from '@/app/utils/TransitionContent';
 
 // Fetch year data using the provided documentId
 async function fetchYear(id: string): Promise<{ Title: string } | null> {
@@ -19,15 +20,15 @@ export default async function YearPage({ params }: { params: { id: string } }) {
 
   if (!year) {
     return (
-      <main>
+      <>
         <h1>Year not found</h1>
-      </main>
+      </>
     );
   }
 
   return (
-    <main>
+    <TransitionContent>
       <h1>{year.Title || 'Untitled Year'}</h1>
-    </main>
+    </TransitionContent>
   );
 }

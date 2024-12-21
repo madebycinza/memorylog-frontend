@@ -1,4 +1,5 @@
 import api from '@/lib/api';
+import TransitionContent from '@/app/utils/TransitionContent';
 
 // Fetch album data using the provided documentId
 async function fetchAlbum(id: string): Promise<{ Title: string } | null> {
@@ -19,15 +20,15 @@ export default async function AlbumPage({ params }: { params: { id: string } }) 
 
   if (!album) {
     return (
-      <main>
+      <>
         <h1>Album not found</h1>
-      </main>
+      </>
     );
   }
 
   return (
-    <main>
+    <TransitionContent>
       <h1>{album.Title || 'Untitled Album'}</h1>
-    </main>
+    </TransitionContent>
   );
 }

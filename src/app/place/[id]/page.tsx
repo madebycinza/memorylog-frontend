@@ -1,4 +1,5 @@
 import api from '@/lib/api';
+import TransitionContent from '@/app/utils/TransitionContent';
 
 // Fetch place data using the provided documentId
 async function fetchPlace(id: string): Promise<{ Title: string } | null> {
@@ -19,15 +20,15 @@ export default async function PlacePage({ params }: { params: { id: string } }) 
 
   if (!place) {
     return (
-      <main>
+      <>
         <h1>Place not found</h1>
-      </main>
+      </>
     );
   }
 
   return (
-    <main>
+    <TransitionContent>
       <h1>{place.Title || 'Untitled Place'}</h1>
-    </main>
+    </TransitionContent>
   );
 }

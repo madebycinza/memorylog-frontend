@@ -1,8 +1,8 @@
 'use client';
 
-import { AnimatePresence } from 'framer-motion';
-import HomeTitle from './components/HomeTitle';
-import styles from './Page.module.css';
+import { motion } from 'framer-motion';
+import HomeTitle from '@/app/components/HomeTitle';
+import styles from '@/app/styles/home.module.css';
 
 export default function Page() {
   return (
@@ -15,7 +15,7 @@ export default function Page() {
       <video
         id="background-video"
         className={styles.backgroundVideo}
-        src="https://memorylog-app.s3.us-west-1.amazonaws.com/maui-vhs-1.mp4"
+        src="https://memorylog-app.s3.us-west-1.amazonaws.com/My+Movie+1.mp4"
         autoPlay
         muted
         loop
@@ -23,18 +23,27 @@ export default function Page() {
       />
 
       {/* Centered Content */}
-      <div className={styles.centeredContent}>
-
-        {/* Main Title */}
+      <motion.div
+        key={"homeCenter"}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{duration: 0.5, ease: 'easeInOut'}}
+        className={`${styles.centeredContent} homeCenter`}
+      >
         <HomeTitle />
-
-      </div>
+      </motion.div>
 
       {/* Bottom Center: Credit */}
-      <div className={`${styles.credit}`}>
+      <motion.div
+        key={"homeBottom"}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{duration: 0.5, ease: 'easeInOut'}}
+        className={`${styles.credit} homeBottom`}
+      >
         <p className={styles.creditSmall}>a project by</p>
         <p className={styles.creditLarge}>Vinícius Miazaki de Moraes</p>
-      </div>
+      </motion.div>
     </div>
   );
 }

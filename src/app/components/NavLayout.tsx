@@ -1,12 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { TransitionLink } from '@/app/utils/TransitionLink';
+import NavLogo from '@/app/components/NavLogo';
 import api from '@/lib/api';
-import styles from './NavLayout.module.css';
-import { useLoader } from '../contexts/LoaderContext';
-import NavLogo from './NavLogo'; // Import NavLogo
+import styles from '@/app/styles/nav.module.css';
 
 type Counts = {
   albums: number;
@@ -14,11 +13,9 @@ type Counts = {
   years: number;
 };
 
-export default function NavLayout({ children }: { children: React.ReactNode }) {
+export default function NavLayout() {
   const [counts, setCounts] = useState<Counts>({ albums: 0, places: 0, years: 0 }); // State for counts
-  const router = useRouter();
   const pathname = usePathname();
-  const { triggerReverseLoader } = useLoader(); // Get loader controls
 
   // Fetch counts for albums, places, and years
   useEffect(() => {
@@ -43,38 +40,22 @@ export default function NavLayout({ children }: { children: React.ReactNode }) {
     fetchCounts();
   }, []);
 
-  const handleNavLinkClick = (e: React.MouseEvent, href: string) => {
-    e.preventDefault(); // Prevent default navigation
-    triggerReverseLoader(); // Trigger loader slide-down animation
-    setTimeout(() => router.push(href), 700); // Navigate after animation
-  };
-
   return (
     <div>
       <header className={styles.header}>
         {/* Logo */}
-        <NavLogo pathname={pathname} router={router} />
+        <NavLogo pathname={pathname} />
 
         {/* Navigation Links */}
         <nav className={styles.navMenu}>
-          <Link href="/albums" onClick={(e) => handleNavLinkClick(e, '/albums')}>
-            {counts.albums} albums
-          </Link>
-          <Link href="/places" onClick={(e) => handleNavLinkClick(e, '/places')}>
-            {counts.places} places
-          </Link>
-          <Link href="/years" onClick={(e) => handleNavLinkClick(e, '/years')}>
-            {counts.years} years
-          </Link>
+          <TransitionLink href="/albums">{counts.albums} albums</TransitionLink>
+          <TransitionLink href="/places">{counts.places} places</TransitionLink>
+          <TransitionLink href="/years">{counts.years} years</TransitionLink>
         </nav>
 
         {/* Plus icon */}
-        <Link href="/about" className={styles.plusIcon}>
-          +
-        </Link>
+        <TransitionLink href="/about" className={styles.plusIcon}>+</TransitionLink>
       </header>
-
-      <main>{children}</main>
     </div>
   );
 }

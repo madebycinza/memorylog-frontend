@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { TransitionLink } from '@/app/utils/TransitionLink';
+import TransitionContent from '@/app/utils/TransitionContent';
 import api from '@/lib/api';
 
 type Album = {
@@ -32,19 +33,19 @@ export default function AlbumsPage() {
     fetchAlbums();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p></p>;
   if (error) return <p>{error}</p>;
 
   return (
-    <div>
+    <TransitionContent>
       <h1>Albums</h1>
       <ul>
         {albums.map((album) => (
           <li key={album.id}>
-            <Link href={`/album/${album.documentId}`}>{album.Title}</Link>
+            <TransitionLink href={`/album/${album.documentId}`}>{album.Title}</TransitionLink>
           </li>
         ))}
       </ul>
-    </div>
+    </TransitionContent>
   );
 }

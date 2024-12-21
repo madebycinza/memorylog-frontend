@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { TransitionLink } from '@/app/utils/TransitionLink';
+import TransitionContent from '@/app/utils/TransitionContent';
 import api from '@/lib/api';
 
 type Place = {
@@ -32,20 +33,19 @@ export default function PlacesPage() {
     fetchPlaces();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p></p>;
   if (error) return <p>{error}</p>;
 
   return (
-    <div>
+    <TransitionContent>
       <h1>Places</h1>
       <ul>
         {places.map((place) => (
           <li key={place.id}>
-            <Link href={`/place/${place.documentId}`}>{place.Title}</Link>
+            <TransitionLink href={`/place/${place.documentId}`}>{place.Title}</TransitionLink>
           </li>
         ))}
       </ul>
-      <Link href="/asdasdasdasdasd/">aaaaa</Link>
-    </div>
+    </TransitionContent>
   );
 }
